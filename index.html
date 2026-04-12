@@ -1,0 +1,1411 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Programme 5/3/1 — DC + Squat — Margot</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #1a2234; color: #e8eaf0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 15px; line-height: 1.5; padding: 0 0 40px 0; }
+
+  .header { background: #141c2e; padding: 24px 16px 16px; border-bottom: 1px solid #2a3550; }
+  .header-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
+  .plan-title { font-size: 32px; font-weight: 800; line-height: 1; color: #fff; }
+  .plan-title span { color: #E8714A; }
+  .plan-meta { text-align: right; }
+  .plan-meta .version { font-size: 11px; color: #6b7a99; margin-bottom: 4px; }
+  .plan-meta .name { font-size: 13px; font-weight: 600; color: #fff; }
+  .plan-meta .objectif { font-size: 11px; color: #E8714A; margin-top: 2px; }
+  .pills { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 4px; }
+  .pill { background: #1e2a42; border-radius: 10px; padding: 10px 12px; border-left: 3px solid #E8714A; }
+  .pill.blue { border-left-color: #4A9EE8; }
+  .pill.red { border-left-color: #E74C3C; }
+  .pill.green { border-left-color: #66BB6A; }
+  .pill-label { font-size: 10px; color: #6b7a99; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; }
+  .pill-value { font-size: 13px; font-weight: 700; color: #fff; }
+  .warning { margin: 12px 0 0; background: #1e1a0a; border: 1px solid #E8A84A; border-radius: 10px; padding: 10px 12px; font-size: 12px; color: #b0a882; line-height: 1.5; }
+
+  .tabs { display: flex; background: #141c2e; border-bottom: 1px solid #2a3550; overflow-x: auto; scrollbar-width: none; position: sticky; top: 0; z-index: 20; }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab { flex-shrink: 0; padding: 12px 16px; font-size: 12px; font-weight: 700; color: #6b7a99; text-transform: uppercase; cursor: pointer; border-bottom: 2px solid transparent; white-space: nowrap; }
+  .tab.active { color: #E8714A; border-bottom-color: #E8714A; }
+  .section { display: none; }
+  .section.active { display: block; }
+
+  .sh { background: #141c2e; padding: 16px 16px 12px; margin-top: 20px; border-bottom: 2px solid #E8714A; }
+  .sh.s2 { border-bottom-color: #d4622a; background: #120a04; }
+  .sh.s3 { border-bottom-color: #E74C3C; background: #160808; }
+  .sh.s4 { border-bottom-color: #4A9EE8; background: #081420; }
+  .sh-num { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #E8714A; font-weight: 700; margin-bottom: 2px; }
+  .sh.s2 .sh-num { color: #d4622a; }
+  .sh.s3 .sh-num { color: #E74C3C; }
+  .sh.s4 .sh-num { color: #4A9EE8; }
+  .sh-titre { font-size: 17px; font-weight: 800; color: #fff; }
+  .sh-sub { font-size: 12px; color: #6b7a99; margin-top: 3px; }
+  .sh-badge { display: inline-block; margin-top: 6px; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; }
+  .sh-badge.s1 { background: #E8714A22; color: #E8714A; border: 1px solid #E8714A44; }
+  .sh-badge.s2 { background: #d4622a22; color: #d4622a; border: 1px solid #d4622a44; }
+  .sh-badge.s3 { background: #E74C3C22; color: #E74C3C; border: 1px solid #E74C3C44; }
+  .sh-badge.s4 { background: #4A9EE822; color: #4A9EE8; border: 1px solid #4A9EE844; }
+
+  .day { display: flex; padding: 0 16px; margin-top: 10px; gap: 12px; align-items: flex-start; }
+  .dl { min-width: 52px; flex-shrink: 0; padding-top: 4px; }
+  .dl .jour { font-size: 20px; font-weight: 800; color: #fff; line-height: 1; }
+  .dl .type { font-size: 11px; font-weight: 700; text-transform: uppercase; margin-top: 3px; }
+  .dl.d5 .type { color: #E8714A; }
+  .dl.d3 .type { color: #d4622a; }
+  .dl.d1 .type { color: #E74C3C; }
+  .dl.dd .jour { color: #4a5568; }
+  .dl.dd .type { color: #4A9EE8; }
+  .dc { flex: 1; display: flex; flex-direction: column; gap: 8px; }
+
+  .card { background: #1e2a42; border-radius: 12px; padding: 12px 14px; border-left: 3px solid transparent; }
+  .card.w { border-left-color: #4A9EE8; background: #0a1220; }
+  .card.c5 { border-left-color: #E8714A; }
+  .card.c3 { border-left-color: #d4622a; }
+  .card.c1 { border-left-color: #E74C3C; background: #180a08; }
+  .card.ca { border-left-color: #2ECC71; }
+  .card.cd { border-left-color: #4A9EE8; background: #0a1220; }
+  .card.cn { border-left-color: #66BB6A; background: #0a180c; }
+
+  .ct { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 12px; }
+  .ct.w { color: #4A9EE8; }
+  .ct.c5 { color: #E8714A; }
+  .ct.c3 { color: #d4622a; }
+  .ct.c1 { color: #E74C3C; }
+  .ct.ca { color: #2ECC71; }
+  .ct.cd { color: #4A9EE8; }
+  .ct.cn { color: #66BB6A; }
+
+  /* BIG WEIGHT DISPLAY */
+  .big-weight {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 0 8px;
+    border-bottom: 1px solid #ffffff10;
+    margin-bottom: 8px;
+  }
+  .big-weight-info { flex: 1; }
+  .big-reps { font-size: 22px; font-weight: 800; }
+  .big-reps.o { color: #E8714A; }
+  .big-reps.co { color: #d4622a; }
+  .big-reps.r { color: #E74C3C; }
+  .big-sets { font-size: 13px; color: #6b7a99; margin-top: 2px; }
+  .big-kg { font-size: 38px; font-weight: 900; line-height: 1; }
+  .big-kg.o { color: #E8714A; }
+  .big-kg.co { color: #d4622a; }
+  .big-kg.r { color: #E74C3C; }
+  .big-pct { font-size: 11px; color: #4a5568; margin-top: 4px; text-align: right; }
+
+  .sr { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid #ffffff0a; gap: 8px; }
+  .sr:last-child { border-bottom: none; }
+  .sr-n { font-size: 11px; color: #4a5568; min-width: 22px; }
+  .sr-m { flex: 1; padding-left: 8px; }
+  .sr-reps { font-size: 14px; font-weight: 600; }
+  .sr-pct { font-size: 11px; color: #4a5568; }
+  .sr-kg { font-size: 16px; font-weight: 700; min-width: 55px; text-align: right; }
+
+  .o { color: #E8714A; }
+  .co { color: #d4622a; }
+  .r { color: #E74C3C; }
+  .b { color: #4A9EE8; }
+  .g { color: #66BB6A; }
+  .gr { color: #6b7a99; }
+  .wc { color: #fff; }
+
+  .note { font-size: 11px; font-style: italic; margin-top: 8px; }
+  .note.o { color: #E8714A; }
+  .note.r { color: #E74C3C; }
+  .note.b { color: #4A9EE8; }
+  .note.g { color: #66BB6A; }
+
+  .bs { padding: 16px; }
+  .bh { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid #2a3550; margin-top: 20px; }
+  .bh:first-child { margin-top: 0; }
+  .bh.o { color: #E8714A; }
+  .bh.b { color: #4A9EE8; }
+  .bh.g { color: #66BB6A; }
+  .bh.r { color: #E74C3C; }
+  .ic { background: #1e2a42; border-radius: 12px; padding: 14px; margin-bottom: 10px; border-left: 3px solid; }
+  .ic.o { border-left-color: #E8714A; }
+  .ic.b { border-left-color: #4A9EE8; }
+  .ic.g { border-left-color: #66BB6A; }
+  .ic.r { border-left-color: #E74C3C; }
+  .it { font-size: 12px; font-weight: 700; margin-bottom: 8px; }
+  .it.o { color: #E8714A; }
+  .it.b { color: #4A9EE8; }
+  .it.g { color: #66BB6A; }
+  .it.r { color: #E74C3C; }
+  .ir { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid #ffffff0a; font-size: 13px; gap: 8px; }
+  .ir:last-child { border-bottom: none; }
+  .il { color: #e8eaf0; flex: 1; }
+  .iv { color: #6b7a99; text-align: right; }
+  .iv strong { color: #E8714A; }
+  .iv.b strong { color: #4A9EE8; }
+  .iv.g strong { color: #66BB6A; }
+  .iv.r strong { color: #E74C3C; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-top">
+    <div class="plan-title">5/3/1<br><span>DC</span></div>
+    <div class="plan-meta">
+      <div class="version">Développé couché + Squat — Jim Wendler</div>
+      <div class="name">Margot · DC 1RM ~36 kg · Squat 1RM ~51 kg</div>
+      <div class="objectif">Même charge par séance · progressif par semaine</div>
+    </div>
+  </div>
+  <div class="pills">
+    <div class="pill"><div class="pill-label">J1 — Jour des 5</div><div class="pill-value">5 × 5 même poids</div></div>
+    <div class="pill"><div class="pill-label">J2 — Jour des 3</div><div class="pill-value">3 × 3 même poids</div></div>
+    <div class="pill red"><div class="pill-label">J3 — Jour du 1</div><div class="pill-value">3 × 1 quasi-max</div></div>
+    <div class="pill blue"><div class="pill-label">S4 — Deload</div><div class="pill-value">Récupération</div></div>
+  </div>
+  <div class="warning">⚠️ 1RM recalculé à 36 kg — charges challengeantes dès S1. Chaque jour = UN seul poids de travail sur toutes les séries. Pas d'AMRAP ici — tu tiens le schéma exact. Si tu rates une rep, la charge était trop lourde — note-le et ajuste.</div>
+</div>
+
+<div class="tabs">
+  <div class="tab active" onclick="show('s1',this)">DC — S1</div>
+  <div class="tab" onclick="show('s2',this)">DC — S2</div>
+  <div class="tab" onclick="show('s3',this)">DC — S3</div>
+  <div class="tab" onclick="show('s4',this)">DC — Deload</div>
+  <div class="tab" onclick="show('sq1',this)">SQ — S1</div>
+  <div class="tab" onclick="show('sq2',this)">SQ — S2</div>
+  <div class="tab" onclick="show('sq3',this)">SQ — S3</div>
+  <div class="tab" onclick="show('sq4',this)">SQ — Deload</div>
+  <div class="tab" onclick="show('tr1',this)">TRACTION — S1</div>
+  <div class="tab" onclick="show('tr2',this)">TRACTION — S2</div>
+  <div class="tab" onclick="show('tr3',this)">TRACTION — S3</div>
+  <div class="tab" onclick="show('info',this)">Infos</div>
+</div>
+
+<!-- ════════ S1 ════════ -->
+<div id="s1" class="section active">
+  <div class="sh s1">
+    <div class="sh-num">Semaine 1</div>
+    <div class="sh-titre">CONSTRUCTION — CHARGES SOLIDES</div>
+    <div class="sh-sub">J1 = 5×5 · J2 = 3×3 · J3 = 3×1</div>
+    <span class="sh-badge s1">75% · 83% · 92%</span>
+  </div>
+
+  <div class="day">
+    <div class="dl d5"><div class="jour">J1</div><div class="type">×5</div></div>
+    <div class="dc">
+      <div class="card w">
+        <div class="ct w">🔥 ÉCHAUFFEMENT</div>
+        <div class="sr"><span class="sr-n">—</span><div class="sr-m"><div class="sr-reps b">8 reps</div><div class="sr-pct">40%</div></div><span class="sr-kg b">14 kg</span></div>
+        <div class="sr"><span class="sr-n">—</span><div class="sr-m"><div class="sr-reps b">5 reps</div><div class="sr-pct">55%</div></div><span class="sr-kg b">20 kg</span></div>
+        <div class="sr"><span class="sr-n">—</span><div class="sr-m"><div class="sr-reps b">3 reps</div><div class="sr-pct">65%</div></div><span class="sr-kg b">23 kg</span></div>
+      </div>
+      <div class="card c5">
+        <div class="ct c5">🏋 5 × 5 REPS — MÊME POIDS</div>
+        <div class="big-weight">
+          <div class="big-weight-info">
+            <div class="big-reps o">5 × 5 reps</div>
+            <div class="big-sets">5 séries · même charge · 3 min récup</div>
+          </div>
+          <div>
+            <div class="big-kg o">27 kg</div>
+            <div class="big-pct">75% du 1RM</div>
+          </div>
+        </div>
+        <div class="note o">→ Si les 5 séries passent proprement : t'es prête pour S2</div>
+      </div>
+      <div class="card ca">
+        <div class="ct ca">💪 ASSISTANCE</div>
+        <div class="sr"><div class="sr-m"><div class="sr-reps" style="font-size:13px">Écarté haltères</div></div><span class="gr">3 × 12</span></div>
+        <div class="sr"><div class="sr-m"><div class="sr-reps" style="font-size:13px">Pompes</div></div><span class="gr">3 × max</span></div>
+        <div class="sr"><div class="sr-m"><div class="sr-reps" style="font-size:13px">Triceps poulie</div></div><span class="gr">3 × 15</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="day">
+    <div class="dl d3"><div class="jour">J2</div><div class="type">×3</div></div>
+    <div class="dc">
+      <div class="card w">
+        <div class="ct w">🔥 ÉCHAUFFEMENT</div>
+        <div class="sr"><span class="sr-n">—</span><div class="sr-m"><div class="sr-reps b">8 reps</div><div class="sr-pct">40%</div></div><span class="sr-kg b">14 kg</span></div>
+        <div class="sr"><span class="sr-n">—</span><div class="sr-m"><div class="sr-reps b">5 reps</div><div class="sr-pct">55%</div></div><span class="sr-kg b">20 kg</span></div>
+        <div class="sr"><span class="sr-n">—</span><div class="sr-m"><div class="sr-reps b">2 reps</div><div class="sr-pct">70%</div></div><span class="sr-kg b">25 kg</span></div>
+      </div>
+      <div class="card c3">
+        <div class="ct c3">🏋 3 × 3 REPS — MÊME POIDS</div>
+        <div class="big-weight">
+          <div class="big-weight-info">
+            <div class="big-reps co">3 × 3 reps</div>
+            <div class="big-sets">3 séries · même charge · 3 min récup</div>
+          </div>
+          <div>
+            <div class="big-kg co">30 kg</div>
+            <div class="big-pct">83% du 1RM</div>
+          </div>
+        </div>
+        <div class="note o">→ 30 kg = ton 5RM actuel — en 3 reps ça doit passer proprement</div>
+      </div>
+      <div class="card ca">
+        <div class="ct ca">💪 ASSISTANCE</div>
+        <div class="sr"><div class="sr-m"><div class="sr-reps" style="font-size:13px">Développé incliné haltères</div></div><span class="gr">3 × 10</span></div>
+        <div class="sr"><div class="sr-m"><div class="sr-reps" style="font-size:13px">Pompes</div></div><span class="gr">3 × max</span></div>
+        <div class="sr"><div class="sr-m"><div class="sr-reps" style="font-size:13px">Triceps poulie</div></div><span class="gr">3 × 15</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="day">
+    <div class="dl d1"><div class="jour">J3</div><div class="type">×1</div></div>
+    <div class="dc">
+      <div class="card w">
+        <div class="ct w">🔥 ÉCHAUFFEMENT</div>
+        <div class="sr"><span class="sr-n">—</span><div class="sr-m"><div class="sr-reps b">5 reps</div><div class="sr-pct">40%</div></div><span class="sr-kg b">14 kg</span></div>
+        <div class="sr"><span class="sr-n">—</span><div class="sr-m"><div class="sr-reps b">3 reps</div><div class="sr-pct">55%</div></div><span class="sr-kg b">20 kg</span></div>
+        <div class="sr"><span class="sr-n">—</span><div class="sr-m"><div class="sr-reps b">2 reps</div><div class="sr-pct">70%</div></div><span class="sr-kg b">25 kg</span></div>
+        <div class="sr"><span class="sr-n">—</span><div class="sr-m"><div class="sr-reps b">1 rep</div><div class="sr-pct">80%</div></div><span class="sr-kg b">29 kg</span></div>
+      </div>
+      <div class="card c1">
+        <div class="ct c1">🏋 3 × 1 REP — MÊME POIDS</div>
+        <div class="big-weight">
+          <div class="big-weight-info">
+            <div class="big-reps r">3 × 1 rep</div>
+            <div class="big-sets">3 singles · même charge · 4 min récup</div>
+          </div>
+          <div>
+            <div class="big-kg r">33 kg</div>
+            <div class="big-pct">92% du 1RM</div>
+          </div>
+        </div>
+        <div class="note r">→ 33 kg = quasi ton max · chaque rep doit être explosive et propre</div>
+      </div>
+      <div class="card ca">
+        <div class="ct ca">💪 ASSISTANCE — LÉGÈRE</div>
+        <div class="sr"><div class="sr-m"><div class="sr-reps" style="font-size:13px">Écarté haltères</div></div><span class="gr">3 × 12</span></div>
+        <div class="sr"><div class="sr-m"><div class="sr-reps" style="font-size:13px">Pompes</div></div><span class="gr">2 × max</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════ S2 ════════ -->
+<div id="s2" class="section">
+  <div class="sh s2">
+    <div class="sh-num">Semaine 2</div>
+    <div class="sh-titre">MONTÉE EN CHARGE</div>
+    <div class="sh-sub">+2 à +2.5 kg par jour par rapport à S1</div>
+    <span class="sh-badge s2">80% · 88% · 97%</span>
+  </div>
+
+  <div class="day">
+    <div class="dl d5"><div class="jour">J1</div><div class="type">×5</div></div>
+    <div class="dc">
+      <div class="card w">
+        <div class="ct w">🔥 ÉCHAUFFEMENT</div>
+        <div class="sr"><span class="sr-n">—</span><div class="sr-m"><div class="sr-reps b">8 reps</div><div class="sr-pct">40%</div></div><span class="sr-kg b">14 kg</span></div>
+        <div class="sr"><span class="sr-n">—</span><div class="sr-m"><div class="sr-reps b">5 reps</div><div class="sr-pct">55%</div></div><span class="sr-kg b">20 kg</span></div>
+        <div class="sr"><span class="sr-n">—</span><div class="sr-m"><div class="sr-reps b">3 reps</div><div class="sr-pct">70%</div></div><span class="sr-kg b">25 kg</span></div>
+      </div>
+      <div class="card c5">
+        <div class="ct c5">🏋 5 × 5 REPS — MÊME POIDS</div>
+        <div class="big-weight">
+          <div class="big-weight-info">
+            <div class="big-reps o">5 × 5 reps</div>
+            <div class="big-sets">5 séries · même charge · 3 min récup</div>
+          </div>
+          <div>
+            <div class="big-kg o">29 kg</div>
+            <div class="big-pct">80% du 1RM</div>
+          </div>
+        </div>
+        <div class="note o">→ +2 kg vs S1 · 5 séries de 5 à 29 kg — c'est dur, c'est voulu</div>
+      </div>
+      <div class="card ca">
+        <div class="ct ca">💪 ASSISTANCE</div>
+        <div class="sr"><div class="sr-m"><div class="sr-reps" style="font-size:13px">Écarté haltères</div></div><span class="gr">3 × 12</span></div>
+        <div class="sr"><div class="sr-m"><div class="sr-reps" style="font-size:13px">Pompes</div></div><span class="gr">3 × max</span></div>
+        <div class="sr"><div class="sr-m"><div class="sr-reps" style="font-size:13px">Triceps poulie</div></div><span class="gr">3 × 15</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="day">
+    <div class="dl d3"><div class="jour">J2</div><div class="type">×3</div></div>
+    <div class="dc">
+      <div class="card w">
+        <div class="ct w">🔥 ÉCHAUFFEMENT</div>
+        <div class="sr"><span class="sr-n">—</span><div class="sr-m"><div class="sr-reps b">8 reps</div><div class="sr-pct">40%</div></div><span class="sr-kg b">14 kg</span></div>
+        <div class="sr"><span class="sr-n">—</span><div class="sr-m"><div class="sr-reps b">5 reps</div><div class="sr-pct">55%</div></div><span class="sr-kg b">20 kg</span></div>
+        <div class="sr"><span class="sr-n">—</span><div class="sr-m"><div class="sr-reps b">2 reps</div><div class="sr-pct">75%</div></div><span class="sr-kg b">27 kg</span></div>
+      </div>
+      <div class="card c3">
+        <div class="ct c3">🏋 3 × 3 REPS — MÊME POIDS</div>
+        <div class="big-weight">
+          <div class="big-weight-info">
+            <div class="big-reps co">3 × 3 reps</div>
+            <div class="big-sets">3 séries · même charge · 3-4 min récup</div>
+          </div>
+          <div>
+            <div class="big-kg co">32 kg</div>
+            <div class="big-pct">88% du 1RM</div>
+          </div>
+        </div>
+        <div class="note o">→ +2 kg vs S1 · 32 kg en 3 reps = très challenging</div>
+      </div>
+      <div class="card ca">
+        <div class="ct ca">💪 ASSISTANCE</div>
+        <div class="sr"><div class="sr-m"><div class="sr-reps" style="font-size:13px">Développé incliné haltères</div></div><span class="gr">3 × 10</span></div>
+        <div class="sr"><div class="sr-m"><div class="sr-reps" style="font-size:13px">Pompes</div></div><span class="gr">3 × max</span></div>
+        <div class="sr"><div class="sr-m"><div class="sr-reps" style="font-size:13px">Triceps poulie</div></div><span class="gr">3 × 15</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="day">
+    <div class="dl d1"><div class="jour">J3</div><div class="type">×1</div></div>
+    <div class="dc">
+      <div class="card w">
+        <div class="ct w">🔥 ÉCHAUFFEMENT</div>
+        <div class="sr"><span class="sr-n">—</span><div class="sr-m"><div class="sr-reps b">5 reps</div><div class="sr-pct">40%</div></div><span class="sr-kg b">14 kg</span></div>
+        <div class="sr"><span class="sr-n">—</span><div class="sr-m"><div class="sr-reps b">3 reps</div><div class="sr-pct">55%</div></div><span class="sr-kg b">20 kg</span></div>
+        <div class="sr"><span class="sr-n">—</span><div class="sr-m"><div class="sr-reps b">2 reps</div><div class="sr-pct">70%</div></div><span class="sr-kg b">25 kg</span></div>
+        <div class="sr"><span class="sr-n">—</span><div class="sr-m"><div class="sr-reps b">1 rep</div><div class="sr-pct">83%</div></div><span class="sr-kg b">30 kg</span></div>
+      </div>
+      <div class="card c1">
+        <div class="ct c1">🏋 3 × 1 REP — MÊME POIDS</div>
+        <div class="big-weight">
+          <div class="big-weight-info">
+            <div class="big-reps r">3 × 1 rep</div>
+            <div class="big-sets">3 singles · même charge · 4-5 min récup</div>
+          </div>
+          <div>
+            <div class="big-kg r">35 kg</div>
+            <div class="big-pct">97% du 1RM</div>
+          </div>
+        </div>
+        <div class="note r">→ 35 kg = quasi ton 1RM absolu · 3 singles nets et propres</div>
+      </div>
+      <div class="card ca">
+        <div class="ct ca">💪 ASSISTANCE — LÉGÈRE</div>
+        <div class="sr"><div class="sr-m"><div class="sr-reps" style="font-size:13px">Écarté haltères</div></div><span class="gr">2 × 12</span></div>
+        <div class="sr"><div class="sr-m"><div class="sr-reps" style="font-size:13px">Pompes</div></div><span class="gr">2 × max</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════ S3 ════════ -->
+<div id="s3" class="section">
+  <div class="sh s3">
+    <div class="sh-num">Semaine 3</div>
+    <div class="sh-titre">PIC — DÉPASSER LE 1RM</div>
+    <div class="sh-sub">J3 dépasse ton 1RM estimé — c'est le but</div>
+    <span class="sh-badge s3">86% · 94% · 103%</span>
+  </div>
+
+  <div class="day">
+    <div class="dl d5"><div class="jour">J1</div><div class="type">×5</div></div>
+    <div class="dc">
+      <div class="card w">
+        <div class="ct w">🔥 ÉCHAUFFEMENT</div>
+        <div class="sr"><span class="sr-n">—</span><div class="sr-m"><div class="sr-reps b">8 reps</div><div class="sr-pct">40%</div></div><span class="sr-kg b">14 kg</span></div>
+        <div class="sr"><span class="sr-n">—</span><div class="sr-m"><div class="sr-reps b">5 reps</div><div class="sr-pct">55%</div></div><span class="sr-kg b">20 kg</span></div>
+        <div class="sr"><span class="sr-n">—</span><div class="sr-m"><div class="sr-reps b">3 reps</div><div class="sr-pct">72%</div></div><span class="sr-kg b">26 kg</span></div>
+      </div>
+      <div class="card c5">
+        <div class="ct c5">🏋 5 × 5 REPS — MÊME POIDS</div>
+        <div class="big-weight">
+          <div class="big-weight-info">
+            <div class="big-reps o">5 × 5 reps</div>
+            <div class="big-sets">5 séries · même charge · 3-4 min récup</div>
+          </div>
+          <div>
+            <div class="big-kg o">31 kg</div>
+            <div class="big-pct">86% du 1RM</div>
+          </div>
+        </div>
+        <div class="note o">→ +2 kg vs S2 · 31 kg en 5×5 = sérieusement dur</div>
+      </div>
+      <div class="card ca">
+        <div class="ct ca">💪 ASSISTANCE</div>
+        <div class="sr"><div class="sr-m"><div class="sr-reps" style="font-size:13px">Écarté haltères</div></div><span class="gr">3 × 12</span></div>
+        <div class="sr"><div class="sr-m"><div class="sr-reps" style="font-size:13px">Pompes</div></div><span class="gr">3 × max</span></div>
+        <div class="sr"><div class="sr-m"><div class="sr-reps" style="font-size:13px">Triceps poulie</div></div><span class="gr">3 × 15</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="day">
+    <div class="dl d3"><div class="jour">J2</div><div class="type">×3</div></div>
+    <div class="dc">
+      <div class="card w">
+        <div class="ct w">🔥 ÉCHAUFFEMENT</div>
+        <div class="sr"><span class="sr-n">—</span><div class="sr-m"><div class="sr-reps b">8 reps</div><div class="sr-pct">40%</div></div><span class="sr-kg b">14 kg</span></div>
+        <div class="sr"><span class="sr-n">—</span><div class="sr-m"><div class="sr-reps b">5 reps</div><div class="sr-pct">55%</div></div><span class="sr-kg b">20 kg</span></div>
+        <div class="sr"><span class="sr-n">—</span><div class="sr-m"><div class="sr-reps b">2 reps</div><div class="sr-pct">78%</div></div><span class="sr-kg b">28 kg</span></div>
+      </div>
+      <div class="card c3">
+        <div class="ct c3">🏋 3 × 3 REPS — MÊME POIDS</div>
+        <div class="big-weight">
+          <div class="big-weight-info">
+            <div class="big-reps co">3 × 3 reps</div>
+            <div class="big-sets">3 séries · même charge · 4 min récup</div>
+          </div>
+          <div>
+            <div class="big-kg co">34 kg</div>
+            <div class="big-pct">94% du 1RM</div>
+          </div>
+        </div>
+        <div class="note o">→ 34 kg = ton 1RM estimé en 3 reps · objectif technique parfaite</div>
+      </div>
+      <div class="card ca">
+        <div class="ct ca">💪 ASSISTANCE</div>
+        <div class="sr"><div class="sr-m"><div class="sr-reps" style="font-size:13px">Développé incliné haltères</div></div><span class="gr">3 × 8</span></div>
+        <div class="sr"><div class="sr-m"><div class="sr-reps" style="font-size:13px">Pompes</div></div><span class="gr">2 × max</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="day">
+    <div class="dl d1"><div class="jour">J3</div><div class="type">×1</div></div>
+    <div class="dc">
+      <div class="card w">
+        <div class="ct w">🔥 ÉCHAUFFEMENT PROGRESSIF</div>
+        <div class="sr"><span class="sr-n">—</span><div class="sr-m"><div class="sr-reps b">5 reps</div><div class="sr-pct">40%</div></div><span class="sr-kg b">14 kg</span></div>
+        <div class="sr"><span class="sr-n">—</span><div class="sr-m"><div class="sr-reps b">3 reps</div><div class="sr-pct">55%</div></div><span class="sr-kg b">20 kg</span></div>
+        <div class="sr"><span class="sr-n">—</span><div class="sr-m"><div class="sr-reps b">2 reps</div><div class="sr-pct">70%</div></div><span class="sr-kg b">25 kg</span></div>
+        <div class="sr"><span class="sr-n">—</span><div class="sr-m"><div class="sr-reps b">1 rep</div><div class="sr-pct">85%</div></div><span class="sr-kg b">30.5 kg</span></div>
+        <div class="sr"><span class="sr-n">—</span><div class="sr-m"><div class="sr-reps b">1 rep</div><div class="sr-pct">95%</div></div><span class="sr-kg b">34 kg</span></div>
+      </div>
+      <div class="card c1">
+        <div class="ct c1">🏋 3 × 1 REP — NOUVEAU MAX</div>
+        <div class="big-weight">
+          <div class="big-weight-info">
+            <div class="big-reps r">3 × 1 rep</div>
+            <div class="big-sets">3 singles · même charge · 5 min récup</div>
+          </div>
+          <div>
+            <div class="big-kg r">37 kg</div>
+            <div class="big-pct">103% — nouveau PR</div>
+          </div>
+        </div>
+        <div class="note r">→ 37 kg DÉPASSE ton 1RM estimé · si les 3 singles passent : nouveau record personnel</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════ DELOAD ════════ -->
+<div id="s4" class="section">
+  <div class="sh s4">
+    <div class="sh-num">Semaine 4</div>
+    <div class="sh-titre">DELOAD — RÉCUPÉRATION OBLIGATOIRE</div>
+    <div class="sh-sub">Pas de performance · technique pure · récup tendons</div>
+    <span class="sh-badge s4">50% · 60% · 70%</span>
+  </div>
+
+  <div class="day">
+    <div class="dl dd"><div class="jour">J1</div><div class="type">DELOAD</div></div>
+    <div class="dc">
+      <div class="card cd">
+        <div class="ct cd">🔄 5 × 5 LÉGER</div>
+        <div class="big-weight">
+          <div class="big-weight-info">
+            <div class="big-reps b">5 × 5 reps</div>
+            <div class="big-sets">technique parfaite · pas de fatigue</div>
+          </div>
+          <div>
+            <div class="big-kg b">18 kg</div>
+            <div class="big-pct">50%</div>
+          </div>
+        </div>
+        <div class="note b">→ Pas d'effort · focus placement et descente contrôlée</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="day">
+    <div class="dl dd"><div class="jour">J2</div><div class="type">DELOAD</div></div>
+    <div class="dc">
+      <div class="card cd">
+        <div class="ct cd">🔄 3 × 3 LÉGER</div>
+        <div class="big-weight">
+          <div class="big-weight-info">
+            <div class="big-reps b">3 × 3 reps</div>
+            <div class="big-sets">récup active · pas de charge lourde</div>
+          </div>
+          <div>
+            <div class="big-kg b">22 kg</div>
+            <div class="big-pct">60%</div>
+          </div>
+        </div>
+        <div class="note b">→ Le corps assimile S3 cette semaine — ne sous-estime pas le deload</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="day">
+    <div class="dl dd"><div class="jour">J3</div><div class="type">DELOAD</div></div>
+    <div class="dc">
+      <div class="card cd">
+        <div class="ct cd">🔄 3 × 1 LÉGER</div>
+        <div class="big-weight">
+          <div class="big-weight-info">
+            <div class="big-reps b">3 × 1 rep</div>
+            <div class="big-sets">singles techniques · 70%</div>
+          </div>
+          <div>
+            <div class="big-kg b">25 kg</div>
+            <div class="big-pct">70%</div>
+          </div>
+        </div>
+      </div>
+      <div class="card cn">
+        <div class="ct cn">🏆 CYCLE 2 — NOUVELLE BASE</div>
+        <div class="big-weight">
+          <div class="big-weight-info">
+            <div class="big-reps g">1RM recalculé</div>
+            <div class="big-sets">si S3 J3 a passé → nouveau 1RM</div>
+          </div>
+          <div>
+            <div class="big-kg g">37+ kg</div>
+            <div class="big-pct">nouveau max</div>
+          </div>
+        </div>
+        <div class="note g">→ Cycle 2 J1 : 5×5 à 31 kg · J2 : 3×3 à 34 kg · J3 : 3×1 à 38 kg</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════ INFOS ════════ -->
+<div id="info" class="section">
+  <div class="bs">
+    <div class="bh o">📐 STRUCTURE DU PLAN</div>
+    <div class="ic o">
+      <div class="it o">Un seul poids par séance — même charge sur toutes les séries</div>
+      <div class="ir"><span class="il">J1 — Jour des 5</span><span class="iv"><strong>5 séries × 5 reps</strong> au même poids</span></div>
+      <div class="ir"><span class="il">J2 — Jour des 3</span><span class="iv"><strong>3 séries × 3 reps</strong> au même poids</span></div>
+      <div class="ir"><span class="il">J3 — Jour du 1</span><span class="iv"><strong>3 singles</strong> au même poids</span></div>
+      <div class="ir"><span class="il">Progression</span><span class="iv"><strong>+2 kg par semaine</strong> par jour</span></div>
+    </div>
+
+    <div class="bh b">📊 TABLEAU DES CHARGES</div>
+    <div class="ic b">
+      <div class="it b">1RM de référence : 36 kg</div>
+      <div class="ir"><span class="il">S1 — J1 / J2 / J3</span><span class="iv b"><strong>27 · 30 · 33 kg</strong></span></div>
+      <div class="ir"><span class="il">S2 — J1 / J2 / J3</span><span class="iv b"><strong>29 · 32 · 35 kg</strong></span></div>
+      <div class="ir"><span class="il">S3 — J1 / J2 / J3</span><span class="iv b"><strong>31 · 34 · 37 kg</strong></span></div>
+      <div class="ir"><span class="il">S4 — Deload J1 / J2 / J3</span><span class="iv b"><strong>18 · 22 · 25 kg</strong></span></div>
+    </div>
+
+    <div class="bh r">⚠️ RÈGLES</div>
+    <div class="ic r">
+      <div class="it r">Pour que ça marche</div>
+      <div class="ir"><span class="il">Si une rep rate</span><span class="iv r"><strong>Note-le — réduis 2.5 kg au prochain cycle</strong></span></div>
+      <div class="ir"><span class="il">Récup J3 surtout</span><span class="iv"><strong>4–5 min entre les singles</strong></span></div>
+      <div class="ir"><span class="il">Ne saute pas le deload</span><span class="iv" style="color:#6b7a99">C'est là que le corps assimile S3</span></div>
+      <div class="ir"><span class="il">Technique avant tout</span><span class="iv r"><strong>Rep ratée tech = stop, pas de forçage</strong></span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════ SQUAT S1 ════════ -->
+<div id="sq1" class="section">
+  <div class="sh s1">
+    <div class="sh-num">Squat — Semaine 1</div>
+    <div class="sh-titre">CONSTRUCTION — CHARGES SOLIDES</div>
+    <div class="sh-sub">J1 = 5×5 · J2 = 3×3 · J3 = 3×1 · 1RM estimé 51 kg</div>
+    <span class="sh-badge s1">75% · 83% · 92%</span>
+  </div>
+
+  <div class="day">
+    <div class="dl d5"><div class="jour">J1</div><div class="type">×5</div></div>
+    <div class="dc">
+      <div class="card w">
+        <div class="ct w">🔥 ÉCHAUFFEMENT</div>
+        <div class="sr"><span class="sr-n">—</span><div class="sr-m"><div class="sr-reps b">10 reps</div><div class="sr-pct">40%</div></div><span class="sr-kg b">20 kg</span></div>
+        <div class="sr"><span class="sr-n">—</span><div class="sr-m"><div class="sr-reps b">5 reps</div><div class="sr-pct">55%</div></div><span class="sr-kg b">28 kg</span></div>
+        <div class="sr"><span class="sr-n">—</span><div class="sr-m"><div class="sr-reps b">3 reps</div><div class="sr-pct">67%</div></div><span class="sr-kg b">34 kg</span></div>
+      </div>
+      <div class="card c5">
+        <div class="ct c5">🏋 5 × 5 REPS — MÊME POIDS</div>
+        <div class="big-weight">
+          <div class="big-weight-info">
+            <div class="big-reps o">5 × 5 reps</div>
+            <div class="big-sets">5 séries · même charge · 3 min récup</div>
+          </div>
+          <div>
+            <div class="big-kg o">38 kg</div>
+            <div class="big-pct">75% du 1RM</div>
+          </div>
+        </div>
+        <div class="note o">→ Légèrement en dessous de ton 5RM — maîtrise la technique</div>
+      </div>
+      <div class="card ca">
+        <div class="ct ca">💪 ASSISTANCE</div>
+        <div class="sr"><div class="sr-m"><div class="sr-reps" style="font-size:13px">Leg press</div></div><span class="gr">3 × 12</span></div>
+        <div class="sr"><div class="sr-m"><div class="sr-reps" style="font-size:13px">Hip thrust</div></div><span class="gr">3 × 12</span></div>
+        <div class="sr"><div class="sr-m"><div class="sr-reps" style="font-size:13px">Fentes</div></div><span class="gr">3 × 10 chaque</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="day">
+    <div class="dl d3"><div class="jour">J2</div><div class="type">×3</div></div>
+    <div class="dc">
+      <div class="card w">
+        <div class="ct w">🔥 ÉCHAUFFEMENT</div>
+        <div class="sr"><span class="sr-n">—</span><div class="sr-m"><div class="sr-reps b">10 reps</div><div class="sr-pct">40%</div></div><span class="sr-kg b">20 kg</span></div>
+        <div class="sr"><span class="sr-n">—</span><div class="sr-m"><div class="sr-reps b">5 reps</div><div class="sr-pct">55%</div></div><span class="sr-kg b">28 kg</span></div>
+        <div class="sr"><span class="sr-n">—</span><div class="sr-m"><div class="sr-reps b">2 reps</div><div class="sr-pct">72%</div></div><span class="sr-kg b">37 kg</span></div>
+      </div>
+      <div class="card c3">
+        <div class="ct c3">🏋 3 × 3 REPS — MÊME POIDS</div>
+        <div class="big-weight">
+          <div class="big-weight-info">
+            <div class="big-reps co">3 × 3 reps</div>
+            <div class="big-sets">3 séries · même charge · 3 min récup</div>
+          </div>
+          <div>
+            <div class="big-kg co">42 kg</div>
+            <div class="big-pct">83% du 1RM</div>
+          </div>
+        </div>
+        <div class="note o">→ 42 kg en 3×3 — au-delà de ton 5RM, concentrate-toi sur la profondeur</div>
+      </div>
+      <div class="card ca">
+        <div class="ct ca">💪 ASSISTANCE</div>
+        <div class="sr"><div class="sr-m"><div class="sr-reps" style="font-size:13px">Leg press</div></div><span class="gr">3 × 10</span></div>
+        <div class="sr"><div class="sr-m"><div class="sr-reps" style="font-size:13px">Hip thrust</div></div><span class="gr">3 × 12</span></div>
+        <div class="sr"><div class="sr-m"><div class="sr-reps" style="font-size:13px">Gainage planche</div></div><span class="gr">3 × 45s</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="day">
+    <div class="dl d1"><div class="jour">J3</div><div class="type">×1</div></div>
+    <div class="dc">
+      <div class="card w">
+        <div class="ct w">🔥 ÉCHAUFFEMENT PROGRESSIF</div>
+        <div class="sr"><span class="sr-n">—</span><div class="sr-m"><div class="sr-reps b">8 reps</div><div class="sr-pct">40%</div></div><span class="sr-kg b">20 kg</span></div>
+        <div class="sr"><span class="sr-n">—</span><div class="sr-m"><div class="sr-reps b">5 reps</div><div class="sr-pct">55%</div></div><span class="sr-kg b">28 kg</span></div>
+        <div class="sr"><span class="sr-n">—</span><div class="sr-m"><div class="sr-reps b">3 reps</div><div class="sr-pct">70%</div></div><span class="sr-kg b">36 kg</span></div>
+        <div class="sr"><span class="sr-n">—</span><div class="sr-m"><div class="sr-reps b">1 rep</div><div class="sr-pct">82%</div></div><span class="sr-kg b">42 kg</span></div>
+      </div>
+      <div class="card c1">
+        <div class="ct c1">🏋 3 × 1 REP — MÊME POIDS</div>
+        <div class="big-weight">
+          <div class="big-weight-info">
+            <div class="big-reps r">3 × 1 rep</div>
+            <div class="big-sets">3 singles · même charge · 4 min récup</div>
+          </div>
+          <div>
+            <div class="big-kg r">47 kg</div>
+            <div class="big-pct">92% du 1RM</div>
+          </div>
+        </div>
+        <div class="note r">→ 47 kg = quasi ton max estimé · chaque rep explosive, profondeur parfaite</div>
+      </div>
+      <div class="card ca">
+        <div class="ct ca">💪 ASSISTANCE — LÉGÈRE</div>
+        <div class="sr"><div class="sr-m"><div class="sr-reps" style="font-size:13px">Hip thrust</div></div><span class="gr">3 × 12</span></div>
+        <div class="sr"><div class="sr-m"><div class="sr-reps" style="font-size:13px">Gainage</div></div><span class="gr">3 × 45s</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════ SQUAT S2 ════════ -->
+<div id="sq2" class="section">
+  <div class="sh s2">
+    <div class="sh-num">Squat — Semaine 2</div>
+    <div class="sh-titre">MONTÉE EN CHARGE</div>
+    <div class="sh-sub">+2.5 kg par jour par rapport à S1</div>
+    <span class="sh-badge s2">80% · 88% · 97%</span>
+  </div>
+
+  <div class="day">
+    <div class="dl d5"><div class="jour">J1</div><div class="type">×5</div></div>
+    <div class="dc">
+      <div class="card w">
+        <div class="ct w">🔥 ÉCHAUFFEMENT</div>
+        <div class="sr"><span class="sr-n">—</span><div class="sr-m"><div class="sr-reps b">10 reps</div><div class="sr-pct">40%</div></div><span class="sr-kg b">20 kg</span></div>
+        <div class="sr"><span class="sr-n">—</span><div class="sr-m"><div class="sr-reps b">5 reps</div><div class="sr-pct">55%</div></div><span class="sr-kg b">28 kg</span></div>
+        <div class="sr"><span class="sr-n">—</span><div class="sr-m"><div class="sr-reps b">3 reps</div><div class="sr-pct">70%</div></div><span class="sr-kg b">36 kg</span></div>
+      </div>
+      <div class="card c5">
+        <div class="ct c5">🏋 5 × 5 REPS — MÊME POIDS</div>
+        <div class="big-weight">
+          <div class="big-weight-info">
+            <div class="big-reps o">5 × 5 reps</div>
+            <div class="big-sets">5 séries · même charge · 3-4 min récup</div>
+          </div>
+          <div>
+            <div class="big-kg o">41 kg</div>
+            <div class="big-pct">80% du 1RM</div>
+          </div>
+        </div>
+        <div class="note o">→ 41 kg en 5×5 — au-dessus de ton 5RM actuel · c'est dur, c'est voulu</div>
+      </div>
+      <div class="card ca">
+        <div class="ct ca">💪 ASSISTANCE</div>
+        <div class="sr"><div class="sr-m"><div class="sr-reps" style="font-size:13px">Leg press</div></div><span class="gr">3 × 12</span></div>
+        <div class="sr"><div class="sr-m"><div class="sr-reps" style="font-size:13px">Hip thrust</div></div><span class="gr">3 × 12</span></div>
+        <div class="sr"><div class="sr-m"><div class="sr-reps" style="font-size:13px">Fentes</div></div><span class="gr">3 × 10 chaque</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="day">
+    <div class="dl d3"><div class="jour">J2</div><div class="type">×3</div></div>
+    <div class="dc">
+      <div class="card w">
+        <div class="ct w">🔥 ÉCHAUFFEMENT</div>
+        <div class="sr"><span class="sr-n">—</span><div class="sr-m"><div class="sr-reps b">10 reps</div><div class="sr-pct">40%</div></div><span class="sr-kg b">20 kg</span></div>
+        <div class="sr"><span class="sr-n">—</span><div class="sr-m"><div class="sr-reps b">5 reps</div><div class="sr-pct">55%</div></div><span class="sr-kg b">28 kg</span></div>
+        <div class="sr"><span class="sr-n">—</span><div class="sr-m"><div class="sr-reps b">2 reps</div><div class="sr-pct">75%</div></div><span class="sr-kg b">38 kg</span></div>
+      </div>
+      <div class="card c3">
+        <div class="ct c3">🏋 3 × 3 REPS — MÊME POIDS</div>
+        <div class="big-weight">
+          <div class="big-weight-info">
+            <div class="big-reps co">3 × 3 reps</div>
+            <div class="big-sets">3 séries · même charge · 4 min récup</div>
+          </div>
+          <div>
+            <div class="big-kg co">45 kg</div>
+            <div class="big-pct">88% du 1RM</div>
+          </div>
+        </div>
+        <div class="note o">→ 45 kg = ton 5RM en 3 reps · objectif profondeur aux hanches à hauteur genoux</div>
+      </div>
+      <div class="card ca">
+        <div class="ct ca">💪 ASSISTANCE</div>
+        <div class="sr"><div class="sr-m"><div class="sr-reps" style="font-size:13px">Leg press</div></div><span class="gr">3 × 10</span></div>
+        <div class="sr"><div class="sr-m"><div class="sr-reps" style="font-size:13px">Hip thrust</div></div><span class="gr">3 × 12</span></div>
+        <div class="sr"><div class="sr-m"><div class="sr-reps" style="font-size:13px">Gainage planche</div></div><span class="gr">3 × 45s</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="day">
+    <div class="dl d1"><div class="jour">J3</div><div class="type">×1</div></div>
+    <div class="dc">
+      <div class="card w">
+        <div class="ct w">🔥 ÉCHAUFFEMENT PROGRESSIF</div>
+        <div class="sr"><span class="sr-n">—</span><div class="sr-m"><div class="sr-reps b">8 reps</div><div class="sr-pct">40%</div></div><span class="sr-kg b">20 kg</span></div>
+        <div class="sr"><span class="sr-n">—</span><div class="sr-m"><div class="sr-reps b">5 reps</div><div class="sr-pct">55%</div></div><span class="sr-kg b">28 kg</span></div>
+        <div class="sr"><span class="sr-n">—</span><div class="sr-m"><div class="sr-reps b">3 reps</div><div class="sr-pct">70%</div></div><span class="sr-kg b">36 kg</span></div>
+        <div class="sr"><span class="sr-n">—</span><div class="sr-m"><div class="sr-reps b">1 rep</div><div class="sr-pct">85%</div></div><span class="sr-kg b">43 kg</span></div>
+      </div>
+      <div class="card c1">
+        <div class="ct c1">🏋 3 × 1 REP — MÊME POIDS</div>
+        <div class="big-weight">
+          <div class="big-weight-info">
+            <div class="big-reps r">3 × 1 rep</div>
+            <div class="big-sets">3 singles · même charge · 4-5 min récup</div>
+          </div>
+          <div>
+            <div class="big-kg r">49.5 kg</div>
+            <div class="big-pct">97% du 1RM</div>
+          </div>
+        </div>
+        <div class="note r">→ Quasi ton 1RM · 3 singles propres = tu es prête pour S3</div>
+      </div>
+      <div class="card ca">
+        <div class="ct ca">💪 ASSISTANCE — LÉGÈRE</div>
+        <div class="sr"><div class="sr-m"><div class="sr-reps" style="font-size:13px">Hip thrust</div></div><span class="gr">2 × 12</span></div>
+        <div class="sr"><div class="sr-m"><div class="sr-reps" style="font-size:13px">Gainage</div></div><span class="gr">2 × 45s</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════ SQUAT S3 ════════ -->
+<div id="sq3" class="section">
+  <div class="sh s3">
+    <div class="sh-num">Squat — Semaine 3</div>
+    <div class="sh-titre">PIC — NOUVEAU RECORD PERSONNEL</div>
+    <div class="sh-sub">J3 dépasse ton 1RM estimé — c'est le but</div>
+    <span class="sh-badge s3">86% · 94% · 103%</span>
+  </div>
+
+  <div class="day">
+    <div class="dl d5"><div class="jour">J1</div><div class="type">×5</div></div>
+    <div class="dc">
+      <div class="card w">
+        <div class="ct w">🔥 ÉCHAUFFEMENT</div>
+        <div class="sr"><span class="sr-n">—</span><div class="sr-m"><div class="sr-reps b">10 reps</div><div class="sr-pct">40%</div></div><span class="sr-kg b">20 kg</span></div>
+        <div class="sr"><span class="sr-n">—</span><div class="sr-m"><div class="sr-reps b">5 reps</div><div class="sr-pct">55%</div></div><span class="sr-kg b">28 kg</span></div>
+        <div class="sr"><span class="sr-n">—</span><div class="sr-m"><div class="sr-reps b">3 reps</div><div class="sr-pct">72%</div></div><span class="sr-kg b">37 kg</span></div>
+      </div>
+      <div class="card c5">
+        <div class="ct c5">🏋 5 × 5 REPS — MÊME POIDS</div>
+        <div class="big-weight">
+          <div class="big-weight-info">
+            <div class="big-reps o">5 × 5 reps</div>
+            <div class="big-sets">5 séries · même charge · 4 min récup</div>
+          </div>
+          <div>
+            <div class="big-kg o">44 kg</div>
+            <div class="big-pct">86% du 1RM</div>
+          </div>
+        </div>
+        <div class="note o">→ 44 kg en 5×5 = PR volume · si ça passe tu es en feu</div>
+      </div>
+      <div class="card ca">
+        <div class="ct ca">💪 ASSISTANCE</div>
+        <div class="sr"><div class="sr-m"><div class="sr-reps" style="font-size:13px">Leg press</div></div><span class="gr">3 × 10</span></div>
+        <div class="sr"><div class="sr-m"><div class="sr-reps" style="font-size:13px">Hip thrust</div></div><span class="gr">3 × 12</span></div>
+        <div class="sr"><div class="sr-m"><div class="sr-reps" style="font-size:13px">Fentes</div></div><span class="gr">3 × 10 chaque</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="day">
+    <div class="dl d3"><div class="jour">J2</div><div class="type">×3</div></div>
+    <div class="dc">
+      <div class="card w">
+        <div class="ct w">🔥 ÉCHAUFFEMENT</div>
+        <div class="sr"><span class="sr-n">—</span><div class="sr-m"><div class="sr-reps b">10 reps</div><div class="sr-pct">40%</div></div><span class="sr-kg b">20 kg</span></div>
+        <div class="sr"><span class="sr-n">—</span><div class="sr-m"><div class="sr-reps b">5 reps</div><div class="sr-pct">55%</div></div><span class="sr-kg b">28 kg</span></div>
+        <div class="sr"><span class="sr-n">—</span><div class="sr-m"><div class="sr-reps b">2 reps</div><div class="sr-pct">78%</div></div><span class="sr-kg b">40 kg</span></div>
+      </div>
+      <div class="card c3">
+        <div class="ct c3">🏋 3 × 3 REPS — MÊME POIDS</div>
+        <div class="big-weight">
+          <div class="big-weight-info">
+            <div class="big-reps co">3 × 3 reps</div>
+            <div class="big-sets">3 séries · même charge · 4 min récup</div>
+          </div>
+          <div>
+            <div class="big-kg co">48 kg</div>
+            <div class="big-pct">94% du 1RM</div>
+          </div>
+        </div>
+        <div class="note o">→ 48 kg en 3×3 = quasi ton 1RM en triple · concentration maximale</div>
+      </div>
+      <div class="card ca">
+        <div class="ct ca">💪 ASSISTANCE — RÉDUITE</div>
+        <div class="sr"><div class="sr-m"><div class="sr-reps" style="font-size:13px">Hip thrust</div></div><span class="gr">3 × 10</span></div>
+        <div class="sr"><div class="sr-m"><div class="sr-reps" style="font-size:13px">Gainage planche</div></div><span class="gr">2 × 45s</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="day">
+    <div class="dl d1"><div class="jour">J3</div><div class="type">×1</div></div>
+    <div class="dc">
+      <div class="card w">
+        <div class="ct w">🔥 ÉCHAUFFEMENT COMPLET</div>
+        <div class="sr"><span class="sr-n">—</span><div class="sr-m"><div class="sr-reps b">8 reps</div><div class="sr-pct">40%</div></div><span class="sr-kg b">20 kg</span></div>
+        <div class="sr"><span class="sr-n">—</span><div class="sr-m"><div class="sr-reps b">5 reps</div><div class="sr-pct">55%</div></div><span class="sr-kg b">28 kg</span></div>
+        <div class="sr"><span class="sr-n">—</span><div class="sr-m"><div class="sr-reps b">3 reps</div><div class="sr-pct">70%</div></div><span class="sr-kg b">36 kg</span></div>
+        <div class="sr"><span class="sr-n">—</span><div class="sr-m"><div class="sr-reps b">1 rep</div><div class="sr-pct">85%</div></div><span class="sr-kg b">43 kg</span></div>
+        <div class="sr"><span class="sr-n">—</span><div class="sr-m"><div class="sr-reps b">1 rep</div><div class="sr-pct">95%</div></div><span class="sr-kg b">48 kg</span></div>
+      </div>
+      <div class="card c1">
+        <div class="ct c1">🏋 3 × 1 REP — NOUVEAU RECORD</div>
+        <div class="big-weight">
+          <div class="big-weight-info">
+            <div class="big-reps r">3 × 1 rep</div>
+            <div class="big-sets">3 singles · même charge · 5 min récup</div>
+          </div>
+          <div>
+            <div class="big-kg r">52.5 kg</div>
+            <div class="big-pct">103% — PR absolu</div>
+          </div>
+        </div>
+        <div class="note r">→ 52.5 kg DÉPASSE ton 1RM estimé · 3 singles = nouveau record personnel au squat</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════ SQUAT DELOAD ════════ -->
+<div id="sq4" class="section">
+  <div class="sh s4">
+    <div class="sh-num">Squat — Semaine 4</div>
+    <div class="sh-titre">DELOAD — RÉCUPÉRATION OBLIGATOIRE</div>
+    <div class="sh-sub">Charges légères · technique · récup genoux et lombaires</div>
+    <span class="sh-badge s4">50% · 60% · 70%</span>
+  </div>
+
+  <div class="day">
+    <div class="dl dd"><div class="jour">J1</div><div class="type">DELOAD</div></div>
+    <div class="dc">
+      <div class="card cd">
+        <div class="ct cd">🔄 5 × 5 LÉGER</div>
+        <div class="big-weight">
+          <div class="big-weight-info">
+            <div class="big-reps b">5 × 5 reps</div>
+            <div class="big-sets">technique parfaite · descente 3 sec</div>
+          </div>
+          <div>
+            <div class="big-kg b">25 kg</div>
+            <div class="big-pct">50%</div>
+          </div>
+        </div>
+        <div class="note b">→ Focus activation fessiers · dos plat · regard horizontal</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="day">
+    <div class="dl dd"><div class="jour">J2</div><div class="type">DELOAD</div></div>
+    <div class="dc">
+      <div class="card cd">
+        <div class="ct cd">🔄 3 × 3 LÉGER</div>
+        <div class="big-weight">
+          <div class="big-weight-info">
+            <div class="big-reps b">3 × 3 reps</div>
+            <div class="big-sets">récup · pas de charge lourde</div>
+          </div>
+          <div>
+            <div class="big-kg b">31 kg</div>
+            <div class="big-pct">60%</div>
+          </div>
+        </div>
+        <div class="note b">→ Les genoux et lombaires récupèrent · ne saute pas ce jour</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="day">
+    <div class="dl dd"><div class="jour">J3</div><div class="type">DELOAD</div></div>
+    <div class="dc">
+      <div class="card cd">
+        <div class="ct cd">🔄 3 × 1 LÉGER</div>
+        <div class="big-weight">
+          <div class="big-weight-info">
+            <div class="big-reps b">3 × 1 rep</div>
+            <div class="big-sets">singles techniques · 70%</div>
+          </div>
+          <div>
+            <div class="big-kg b">36 kg</div>
+            <div class="big-pct">70%</div>
+          </div>
+        </div>
+      </div>
+      <div class="card cn">
+        <div class="ct cn">🏆 CYCLE 2 — NOUVELLES BASES</div>
+        <div class="big-weight">
+          <div class="big-weight-info">
+            <div class="big-reps g">1RM recalculé squat</div>
+            <div class="big-sets">si S3 J3 a passé → nouveau 1RM</div>
+          </div>
+          <div>
+            <div class="big-kg g">52.5+ kg</div>
+            <div class="big-pct">nouveau max</div>
+          </div>
+        </div>
+        <div class="note g">→ Cycle 2 : J1 5×5 à 44 kg · J2 3×3 à 49 kg · J3 3×1 à 54 kg</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════ TRACTION S1 ════════ -->
+<div id="tr1" class="section">
+  <div class="sh s1">
+    <div class="sh-num">Traction — Semaine 1</div>
+    <div class="sh-titre">CONSTRUIRE LA FORCE DE TIRAGE</div>
+    <div class="sh-sub">3 séances · assistance 20 kg → 15 kg · excentrique partout</div>
+    <span class="sh-badge s1">Fréquence haute · qualité d'exécution</span>
+  </div>
+
+  <div class="day">
+    <div class="dl d5"><div class="jour">J1</div><div class="type">VOLUME</div></div>
+    <div class="dc">
+      <div class="card w">
+        <div class="ct w">🔥 ACTIVATION</div>
+        <div class="sr"><span class="sr-n">—</span><div class="sr-m"><div class="sr-reps b">Dead hang</div><div class="sr-pct">tenue max</div></div><span class="sr-kg b">2 × max</span></div>
+        <div class="sr"><span class="sr-n">—</span><div class="sr-m"><div class="sr-reps b">Lat pull</div><div class="sr-pct">léger</div></div><span class="sr-kg b">2 × 10 · 30 kg</span></div>
+      </div>
+      <div class="card c5">
+        <div class="ct c5">🏋 LAT PULL — FORCE</div>
+        <div class="big-weight">
+          <div class="big-weight-info">
+            <div class="big-reps o">5 × 5 reps</div>
+            <div class="big-sets">même charge · 2 min récup · descente 3s</div>
+          </div>
+          <div>
+            <div class="big-kg o">39 kg</div>
+            <div class="big-pct">lourd</div>
+          </div>
+        </div>
+        <div class="note o">→ Descente contrôlée 3 sec · coudes vers le bas · pas vers l'arrière</div>
+      </div>
+      <div class="card c3">
+        <div class="ct c3">🏋 TRACTION ASSISTÉE</div>
+        <div class="big-weight">
+          <div class="big-weight-info">
+            <div class="big-reps co">4 × 4 reps</div>
+            <div class="big-sets">assistance élastique ou machine · 2 min récup</div>
+          </div>
+          <div>
+            <div class="big-kg co">20 kg</div>
+            <div class="big-pct">assist.</div>
+          </div>
+        </div>
+        <div class="note o">→ Prise pronation ou supination — teste les deux ce jour</div>
+      </div>
+      <div class="card c1">
+        <div class="ct c1">🏋 EXCENTRIQUE BARRE</div>
+        <div class="big-weight">
+          <div class="big-weight-info">
+            <div class="big-reps r">3 × 3 reps</div>
+            <div class="big-sets">monte assistée · descente libre · 90s récup</div>
+          </div>
+          <div>
+            <div class="big-kg r">6–7s</div>
+            <div class="big-pct">descente</div>
+          </div>
+        </div>
+        <div class="note r">→ Plus la descente est lente, plus ça construit</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="day">
+    <div class="dl d3"><div class="jour">J2</div><div class="type">INTENSITÉ</div></div>
+    <div class="dc">
+      <div class="card w">
+        <div class="ct w">🔥 ACTIVATION</div>
+        <div class="sr"><span class="sr-n">—</span><div class="sr-m"><div class="sr-reps b">Dead hang</div><div class="sr-pct">tenue max</div></div><span class="sr-kg b">3 × max</span></div>
+      </div>
+      <div class="card c5">
+        <div class="ct c5">🏋 LAT PULL LOURD</div>
+        <div class="big-weight">
+          <div class="big-weight-info">
+            <div class="big-reps o">4 × 4 reps</div>
+            <div class="big-sets">même charge · 2 min récup</div>
+          </div>
+          <div>
+            <div class="big-kg o">42 kg</div>
+            <div class="big-pct">plus lourd</div>
+          </div>
+        </div>
+      </div>
+      <div class="card c3">
+        <div class="ct c3">🏋 TRACTION ASSISTÉE — RÉDUITE</div>
+        <div class="big-weight">
+          <div class="big-weight-info">
+            <div class="big-reps co">4 × 3 reps</div>
+            <div class="big-sets">assistance réduite · 2 min récup</div>
+          </div>
+          <div>
+            <div class="big-kg co">18 kg</div>
+            <div class="big-pct">assist.</div>
+          </div>
+        </div>
+        <div class="note o">→ -2 kg d'assistance vs J1 · si ça passe proprement tu progresses</div>
+      </div>
+      <div class="card c1">
+        <div class="ct c1">🏋 ISOMÉTRIQUE SOMMET</div>
+        <div class="big-weight">
+          <div class="big-weight-info">
+            <div class="big-reps r">3 × 1 tenue</div>
+            <div class="big-sets">monte assistée · tiens menton au-dessus · lâche</div>
+          </div>
+          <div>
+            <div class="big-kg r">8–10s</div>
+            <div class="big-pct">tenir</div>
+          </div>
+        </div>
+        <div class="note r">→ Position la plus difficile — la tenir construit la force de finition</div>
+      </div>
+      <div class="card ca">
+        <div class="ct ca">💪 ASSISTANCE DOS</div>
+        <div class="sr"><div class="sr-m"><div class="sr-reps" style="font-size:13px">Rowing haltère</div></div><span class="gr">3 × 10 chaque</span></div>
+        <div class="sr"><div class="sr-m"><div class="sr-reps" style="font-size:13px">Face pull</div></div><span class="gr">3 × 15</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="day">
+    <div class="dl d1"><div class="jour">J3</div><div class="type">STREET</div></div>
+    <div class="dc">
+      <div class="card c1">
+        <div class="ct c1">🏋 BARRE STREET — 10 MIN MAX</div>
+        <div class="big-weight">
+          <div class="big-weight-info">
+            <div class="big-reps r">3 × 2 reps</div>
+            <div class="big-sets">excentrique pur · descente max</div>
+          </div>
+          <div>
+            <div class="big-kg r">8s</div>
+            <div class="big-pct">descente</div>
+          </div>
+        </div>
+        <div class="note r">→ Monte avec le step ou sautée · descend le plus lentement possible</div>
+      </div>
+      <div class="card w">
+        <div class="ct w">Dead hang de finition</div>
+        <div class="sr"><span class="sr-n">—</span><div class="sr-m"><div class="sr-reps b">Dead hang</div></div><span class="sr-kg b">3 × max</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════ TRACTION S2 ════════ -->
+<div id="tr2" class="section">
+  <div class="sh s2">
+    <div class="sh-num">Traction — Semaine 2</div>
+    <div class="sh-titre">RÉDUIRE L'ASSISTANCE — TENTATIVES</div>
+    <div class="sh-sub">Assistance 15 kg → 10 kg · premières tentatives non-assistées</div>
+    <span class="sh-badge s2">Assistance réduite · tentatives libres</span>
+  </div>
+
+  <div class="day">
+    <div class="dl d5"><div class="jour">J1</div><div class="type">VOLUME</div></div>
+    <div class="dc">
+      <div class="card w">
+        <div class="ct w">🔥 ACTIVATION</div>
+        <div class="sr"><span class="sr-n">—</span><div class="sr-m"><div class="sr-reps b">Dead hang</div></div><span class="sr-kg b">3 × max</span></div>
+        <div class="sr"><span class="sr-n">—</span><div class="sr-m"><div class="sr-reps b">Lat pull</div><div class="sr-pct">léger</div></div><span class="sr-kg b">2 × 8 · 32 kg</span></div>
+      </div>
+      <div class="card c5">
+        <div class="ct c5">🏋 LAT PULL LOURD</div>
+        <div class="big-weight">
+          <div class="big-weight-info">
+            <div class="big-reps o">5 × 4 reps</div>
+            <div class="big-sets">même charge · 2 min récup</div>
+          </div>
+          <div>
+            <div class="big-kg o">44 kg</div>
+            <div class="big-pct">+5 kg vs S1</div>
+          </div>
+        </div>
+      </div>
+      <div class="card c3">
+        <div class="ct c3">🏋 TRACTION ASSISTÉE</div>
+        <div class="big-weight">
+          <div class="big-weight-info">
+            <div class="big-reps co">4 × 3 reps</div>
+            <div class="big-sets">assistance réduite · 2 min récup</div>
+          </div>
+          <div>
+            <div class="big-kg co">15 kg</div>
+            <div class="big-pct">assist.</div>
+          </div>
+        </div>
+        <div class="note o">→ -5 kg d'assistance vs S1 · c'est la semaine clé</div>
+      </div>
+      <div class="card c1">
+        <div class="ct c1">🏋 EXCENTRIQUE</div>
+        <div class="big-weight">
+          <div class="big-weight-info">
+            <div class="big-reps r">4 × 3 reps</div>
+            <div class="big-sets">descente lente · 90s récup</div>
+          </div>
+          <div>
+            <div class="big-kg r">8–9s</div>
+            <div class="big-pct">descente</div>
+          </div>
+        </div>
+      </div>
+      <div class="card ca">
+        <div class="ct ca">💪 ASSISTANCE DOS</div>
+        <div class="sr"><div class="sr-m"><div class="sr-reps" style="font-size:13px">Rowing haltère lourd</div></div><span class="gr">4 × 8 chaque</span></div>
+        <div class="sr"><div class="sr-m"><div class="sr-reps" style="font-size:13px">Curl biceps</div></div><span class="gr">3 × 10</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="day">
+    <div class="dl d3"><div class="jour">J2</div><div class="type">TENTATIVES</div></div>
+    <div class="dc">
+      <div class="card w">
+        <div class="ct w">🔥 ACTIVATION</div>
+        <div class="sr"><span class="sr-n">—</span><div class="sr-m"><div class="sr-reps b">Dead hang</div></div><span class="sr-kg b">3 × max</span></div>
+        <div class="sr"><span class="sr-n">—</span><div class="sr-m"><div class="sr-reps b">Lat pull activation</div></div><span class="sr-kg b">2 × 6 · 35 kg</span></div>
+      </div>
+      <div class="card c5">
+        <div class="ct c5">🏋 LAT PULL</div>
+        <div class="big-weight">
+          <div class="big-weight-info">
+            <div class="big-reps o">4 × 3 reps</div>
+            <div class="big-sets">très lourd · 3 min récup</div>
+          </div>
+          <div>
+            <div class="big-kg o">48 kg</div>
+            <div class="big-pct">lourd max</div>
+          </div>
+        </div>
+        <div class="note o">→ Si tu tires 48 kg au lat pull, la traction non-assistée est proche</div>
+      </div>
+      <div class="card c3">
+        <div class="ct c3">🏋 ASSISTÉE MINIMALE</div>
+        <div class="big-weight">
+          <div class="big-weight-info">
+            <div class="big-reps co">3 × 2 reps</div>
+            <div class="big-sets">assistance minimale · 2 min récup</div>
+          </div>
+          <div>
+            <div class="big-kg co">10 kg</div>
+            <div class="big-pct">assist.</div>
+          </div>
+        </div>
+      </div>
+      <div class="card c1">
+        <div class="ct c1">🏋 TENTATIVES NON-ASSISTÉES</div>
+        <div class="big-weight">
+          <div class="big-weight-info">
+            <div class="big-reps r">× 3 essais</div>
+            <div class="big-sets">3 min récup entre chaque · tout donner</div>
+          </div>
+          <div>
+            <div class="big-kg r">0 kg</div>
+            <div class="big-pct">libre</div>
+          </div>
+        </div>
+        <div class="note r">→ Inspire fort · bloque · tire les coudes vers le bas · pas vers l'arrière</div>
+      </div>
+      <div class="card c5" style="border-left-color:#1ABC9C; background:#081a16;">
+        <div class="ct" style="color:#1ABC9C;">🏋 ISOMÉTRIQUE SOMMET</div>
+        <div class="big-weight">
+          <div class="big-weight-info">
+            <div class="big-reps" style="color:#1ABC9C;">3 × 1 tenue</div>
+            <div class="big-sets">monte assistée · tiens · 90s récup</div>
+          </div>
+          <div>
+            <div class="big-kg" style="color:#1ABC9C;">10–12s</div>
+            <div class="big-pct">tenir</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="day">
+    <div class="dl d1"><div class="jour">J3</div><div class="type">STREET</div></div>
+    <div class="dc">
+      <div class="card c1">
+        <div class="ct c1">🏋 STREET — EXCENTRIQUE + TENTATIVES</div>
+        <div class="sr"><span class="sr-n">1</span><div class="sr-m"><div class="sr-reps r">Excentrique</div><div class="sr-pct">3 × 2 · descente 9s</div></div><span class="sr-kg r">max lent</span></div>
+        <div class="sr"><span class="sr-n">2</span><div class="sr-m"><div class="sr-reps r">Tentative libre</div><div class="sr-pct">× 2 essais · 3 min récup</div></div><span class="sr-kg r">0 kg</span></div>
+        <div class="sr"><span class="sr-n">3</span><div class="sr-m"><div class="sr-reps b">Dead hang</div><div class="sr-pct">finition</div></div><span class="sr-kg b">3 × max</span></div>
+        <div class="note r">→ Teste pronation ET supination — utilise la prise qui passe le mieux le J fin</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════ TRACTION S3 ════════ -->
+<div id="tr3" class="section">
+  <div class="sh s3">
+    <div class="sh-num">Traction — Semaine 3</div>
+    <div class="sh-titre">LA SEMAINE DE LA PREMIÈRE TRACTION</div>
+    <div class="sh-sub">Volume réduit · fraîcheur · J3 = le jour J</div>
+    <span class="sh-badge s3">Affûtage · confiance · J3 = tout donner</span>
+  </div>
+
+  <div class="day">
+    <div class="dl d5"><div class="jour">J1</div><div class="type">ACTIVATION</div></div>
+    <div class="dc">
+      <div class="card w">
+        <div class="ct w">🔥 ACTIVATION</div>
+        <div class="sr"><span class="sr-n">—</span><div class="sr-m"><div class="sr-reps b">Dead hang</div></div><span class="sr-kg b">2 × max</span></div>
+      </div>
+      <div class="card c5">
+        <div class="ct c5">🏋 LAT PULL</div>
+        <div class="big-weight">
+          <div class="big-weight-info">
+            <div class="big-reps o">3 × 4 reps</div>
+            <div class="big-sets">volume réduit · 2 min récup</div>
+          </div>
+          <div>
+            <div class="big-kg o">44 kg</div>
+            <div class="big-pct">pas lourd max</div>
+          </div>
+        </div>
+      </div>
+      <div class="card c3">
+        <div class="ct c3">🏋 ASSISTÉE D'ACTIVATION</div>
+        <div class="big-weight">
+          <div class="big-weight-info">
+            <div class="big-reps co">3 × 2 reps</div>
+            <div class="big-sets">juste sentir le mouvement · 2 min récup</div>
+          </div>
+          <div>
+            <div class="big-kg co">10 kg</div>
+            <div class="big-pct">assist.</div>
+          </div>
+        </div>
+        <div class="note o">→ Pas de fatigue aujourd'hui — tu préserves les tendons pour J3</div>
+      </div>
+      <div class="card c1">
+        <div class="ct c1">🏋 EXCENTRIQUE LÉGER</div>
+        <div class="big-weight">
+          <div class="big-weight-info">
+            <div class="big-reps r">2 × 2 reps</div>
+            <div class="big-sets">descente lente · pas jusqu'à l'échec</div>
+          </div>
+          <div>
+            <div class="big-kg r">8s</div>
+            <div class="big-pct">descente</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="day">
+    <div class="dl repos"><div class="jour">J2</div><div class="type">REPOS</div></div>
+    <div class="dc">
+      <div class="card" style="border-left-color:#2a3550; background:#161e30;">
+        <div class="ct" style="color:#4a5568;">Repos complet</div>
+        <div class="sr"><span class="sr-n">—</span><div class="sr-m"><div class="sr-reps" style="color:#4a5568;">Étirements épaules et dos</div></div><span class="sr-kg" style="color:#4a5568;">15 min</span></div>
+        <div class="sr"><span class="sr-n">—</span><div class="sr-m"><div class="sr-reps" style="color:#4a5568;">Bien manger · bien dormir</div></div><span class="sr-kg" style="color:#4a5568;">8h+</span></div>
+        <div class="note b">→ Les tendons récupèrent en 48h — ce repos est obligatoire</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="day">
+    <div class="dl tep"><div class="jour">J3</div><div class="type">⚡ JOUR J</div></div>
+    <div class="dc">
+      <div class="card w">
+        <div class="ct w">🔥 ÉCHAUFFEMENT COMPLET</div>
+        <div class="sr"><span class="sr-n">1</span><div class="sr-m"><div class="sr-reps b">Dead hang</div><div class="sr-pct">activation</div></div><span class="sr-kg b">2 × 20s</span></div>
+        <div class="sr"><span class="sr-n">2</span><div class="sr-m"><div class="sr-reps b">Lat pull léger</div><div class="sr-pct">mise en route</div></div><span class="sr-kg b">2 × 8 · 32 kg</span></div>
+        <div class="sr"><span class="sr-n">3</span><div class="sr-m"><div class="sr-reps b">Assistée activation</div><div class="sr-pct">1 × 2 reps</div></div><span class="sr-kg b">12 kg assist.</span></div>
+        <div class="sr"><span class="sr-n">4</span><div class="sr-m"><div class="sr-reps b">Respiration 4-7-8</div><div class="sr-pct">3 cycles</div></div><span class="sr-kg b">avant barre</span></div>
+      </div>
+      <div class="card cn">
+        <div class="ct cn">🏆 PREMIÈRE TRACTION NON-ASSISTÉE</div>
+        <div class="big-weight">
+          <div class="big-weight-info">
+            <div class="big-reps g">3 tentatives</div>
+            <div class="big-sets">3 min récup entre chaque · tout donner sur chaque</div>
+          </div>
+          <div>
+            <div class="big-kg g">0 kg</div>
+            <div class="big-pct">libre</div>
+          </div>
+        </div>
+        <div class="note g">→ Inspire fort · serre la barre · coudes vers le bas · pense à te lever plutôt qu'à te tirer</div>
+      </div>
+      <div class="card c1" style="border-left-color:#F1C40F; background:#1a1800;">
+        <div class="ct" style="color:#F1C40F;">💡 SI ÇA PASSE PAS AU 1ER ESSAI</div>
+        <div class="sr"><span class="sr-n">→</span><div class="sr-m"><div class="sr-reps" style="color:#F1C40F;">Reprends 5 min de repos</div></div></div>
+        <div class="sr"><span class="sr-n">→</span><div class="sr-m"><div class="sr-reps" style="color:#F1C40F;">Essai 2 : prise supination (plus facile)</div></div></div>
+        <div class="sr"><span class="sr-n">→</span><div class="sr-m"><div class="sr-reps" style="color:#F1C40F;">Essai 3 : tout donner — c'est le dernier</div></div></div>
+        <div class="note" style="color:#F1C40F;">→ 3 semaines de travail sont là. Fais confiance à ta préparation.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function show(id, tab) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  tab.classList.add('active');
+}
+</script>
+</body>
+</html>
